@@ -1,0 +1,19 @@
+- if not @authenticated
+    #login
+      form method="post" action="/login"
+        table#login-layout
+          tr
+            td
+              Username
+            td colspan="2"
+              input type="text" name="username" id="username" required="required" autofocus="autofocus" maxlength="25" placeholder="Username"
+          tr
+            td
+              Password
+            td colspan="2"
+             input type="password" name="password" id="password" required="required" maxlength="100" placeholder="Password"
+        input type="submit"  
+- else
+    #logout
+      form method="get" action="/logout"
+        input type="submit" id="submit"
