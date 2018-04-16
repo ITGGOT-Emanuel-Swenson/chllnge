@@ -1,4 +1,3 @@
-
 class Repo
 
     def initialize(db, table, domain_object, columns)

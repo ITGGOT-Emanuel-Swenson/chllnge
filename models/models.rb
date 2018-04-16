@@ -1,7 +1,3 @@
-require 'bcrypt' 
-require 'sqlite3'
-require 'securerandom'
-
 class Authentication
     
     def self.user_exists(db, username)
