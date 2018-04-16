@@ -1,8 +1,7 @@
 class CHLLNGE < Sinatra::Base
-    db_name = "chllnge.db"
-    db = SQLite3::Database.new(db_name)
-    
-    db_handler = DBHandler.new("chllnge.db")
+    db_path = "database/chllnge.db"
+    database = DataBase.new(db_path)
+    db_handler = DBHandler.new(database.db)
     def authorized(db)
         login_cookie = session[:login]
         username = session[:username]
