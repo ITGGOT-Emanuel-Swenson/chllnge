@@ -1,8 +1,3 @@
-require 'sinatra'
-require 'erb'
-require 'sqlite3'
-require_relative 'models/models.rb'
-
 class CHLLNGE < Sinatra::Base
     db_name = "chllnge.db"
     db = SQLite3::Database.new(db_name)
