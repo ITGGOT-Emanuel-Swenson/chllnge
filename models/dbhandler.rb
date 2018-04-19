@@ -8,7 +8,7 @@ require_relative 'authentication.rb'
 class DBHandler
 
     def initialize(db_path)
-        database = Database.new(db_path)
+        database = DataBase.new(db_path)
         @db = database.db
 
         @comments_repo = CommentRepo.new(
@@ -24,8 +24,9 @@ class DBHandler
             domain_object=ChallengeObject,
             columns=["user_id", "uuid", "content", "img_url"],
             identifier_column='UUID',
-            foreign_domain_objects = {"comments_repo" => @comments_repo})
+            foreign_domain_objects = {"comments_repo" => @comments_repo}
             )
+            
         @profiles_repo = ProfileRepo.new(
             db=@db, 
             table="Profiles", 

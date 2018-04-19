@@ -6,8 +6,8 @@ class Repo
         @domain_object = domain_object
         @columns = columns
         @id_column = identifier_column
-        if foreign_domain_objecs
-            @foreign_domain_objecs = foreign_domain_objecs
+        if foreign_domain_objects
+            @foreign_domain_objects = foreign_domain_objects
         end
     end
 
@@ -59,7 +59,7 @@ class Repo
                                   @columns, 
                                   @id_column, 
                                   id, 
-                                  foreign_domain_objecs=@foreign_domain_objects
+                                  foreign_domain_objects=@foreign_domain_objects
                                  )
     end
     # get all domain objects
@@ -94,8 +94,8 @@ class DomainObject
         @columns = columns
         @id_column = identifier_column
         
-        if foreign_domain_objecs
-            @foreign_domain_objecs = foreign_domain_objecs
+        if foreign_domain_objects
+            @foreign_domain_objects = foreign_domain_objects
         end
 
         # veryify that the id is valid
