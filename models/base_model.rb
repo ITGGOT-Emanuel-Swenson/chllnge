@@ -1,11 +1,14 @@
 class Repo
 
-    def initialize(db, table, domain_object, columns, identifier_column)
+    def initialize(db, table, domain_object, columns, identifier_column, foreign_domain_objects=nil )
         @db = db
         @table = table
         @domain_object = domain_object
         @columns = columns
         @id_column = identifier_column
+        if foreign_domain_objecs
+            @foreign_domain_objecs = foreign_domain_objecs
+        end
     end
 
     def multi_column_query_gen(n)
@@ -50,7 +53,14 @@ class Repo
   
     # get domain object
     def get(id)
-        return @domain_object.new(@db, @table, @columns, @id_column, id)
+        return @domain_object.new(
+                                  @db, 
+                                  @table, 
+                                  @columns, 
+                                  @id_column, 
+                                  id, 
+                                  foreign_domain_objecs=@foreign_domain_objects
+                                 )
     end
     # get all domain objects
     def all()
@@ -78,11 +88,15 @@ end
 
 class DomainObject
 
-    def initialize(db, table, columns, identifier_column, id)
+    def initialize(db, table, columns, identifier_column, id, foreign_domain_objects=nil)
         @db = db
         @table = table
         @columns = columns
         @id_column = identifier_column
+        
+        if foreign_domain_objecs
+            @foreign_domain_objecs = foreign_domain_objecs
+        end
 
         # veryify that the id is valid
         # @get the first column, if it isnt an empty array the id is valid

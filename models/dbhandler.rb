@@ -11,11 +11,37 @@ class DBHandler
         database = Database.new(db_path)
         @db = database.db
 
-        @comments_repo = CommentRepo.new(@db, "Comments", CommentObject, ["user_id", "challenge_id", "uuid", "content", "img_url", "creation_date"], 'UUID')
-        @challenges_repo = ChallengeRepo.new(@db, "Challenges", ChallengeObject, ["user_id", "uuid", "content", "img_url"], 'UUID', @comments_repo)
-        @profiles_repo = ProfileRepo.new(@db, "Profiles", ProfileObject, ["user_id", "uuid", "content", "img_url", "creation_date"], 'UUID', @challenges_repo)
+        @comments_repo = CommentRepo.new(
+            db=@db,
+            table="Comments",
+            domain_object=CommentObject,
+            columns = ["user_id", "challenge_id", "uuid", "content", "img_url", "creation_date"],
+            identifier_column = 'UUID'
+            )
+        @challenges_repo = ChallengeRepo.new(
+            db=@db,
+            table="Challenges",
+            domain_object=ChallengeObject,
+            columns=["user_id", "uuid", "content", "img_url"],
+            identifier_column='UUID',
+            foreign_domain_objects = {"comments_repo" => @comments_repo})
+            )
+        @profiles_repo = ProfileRepo.new(
+            db=@db, 
+            table="Profiles", 
+            domain_object=ProfileObject, 
+            columns=["user_id", "uuid", "content", "img_url", "creation_date"], 
+            identifier_column='UUID', 
+            foreign_domain_objects = {"challenges_repo" => @challenges_repo}
+            )
         
-        acc_repo = AccountRepo.new(@db, 'Accounts', AccountObject, ["username", "password", "date_joined"], 'username')
+        acc_repo = AccountRepo.new(
+            db=@db, 
+            table='Accounts', 
+            domain_object=AccountObject, 
+            columns=["username", "password", "date_joined"], 
+            identifier_column='username'
+            )
         @auth = Authentication.new(acc_repo)
     end
 
