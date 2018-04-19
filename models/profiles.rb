@@ -2,7 +2,7 @@ require_relative 'base_model.rb'
 
 class ProfileObject < DomainObject
 
-    def initialize(db, table, uuid, columns, challenge_repo)
+    def initialize(db, table, uuid, columns, identifier_label, challenge_repo)
         @challenge_repo = challenge_repo
         super(db, table, uuid, columns)
     end
@@ -14,7 +14,7 @@ class ProfileObject < DomainObject
 end
 class ProfileRepo < Repo
     
-    def initialize(db, table, uuid, columns, challenge_repo)
+    def initialize(db, table, uuid, columns, identifier_label, challenge_repo)
         @challenge_repo = challenge_repo
         super(db, table, uuid, columns)
     end

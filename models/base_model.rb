@@ -1,10 +1,11 @@
 class Repo
 
-    def initialize(db, table, domain_object, columns)
+    def initialize(db, table, domain_object, columns, identifier_column)
         @db = db
         @table = table
         @domain_object = domain_object
         @columns = columns
+        @id_column = identifier_column
     end
 
     def multi_column_query_gen(n)
@@ -43,24 +44,20 @@ class Repo
         p query
         p val_hash.values
         @db.execute(query, val_hash.values)
-        
-        # return the object created if uuid in val_hash
-        # this will pretty much always be called
-        if val_hash["uuid"]
-            return get(val_hash["uuid"])
-        end
+                
+        return get(val_hash[@id_column])
     end
   
     # get domain object
-    def get(uuid)
-        return @domain_object.new(@db, @table, @columns, uuid)
+    def get(id)
+        return @domain_object.new(@db, @table, @columns, @id_column, id)
     end
     # get all domain objects
     def all()
-        query = "SELECT uuid FROM #{@table}"
+        query = "SELECT #{@id_column} FROM #{@table}"
         resp = @db.execute(query)
         resp.flatten!
-        resp.map! {|uuid| get(uuid)}
+        resp.map! {|id| get(id)}
         return resp
     end
 
@@ -70,10 +67,10 @@ class Repo
         if [column] - @columns != []
             raise "Error, invalid column. column: #{column}, value:#{value}\n valid columns:#{@columns}"
         end
-        query = "SELECT UUID FROM #{@table} WHERE #{column} = ?"
+        query = "SELECT #{@id_column} FROM #{@table} WHERE #{column} = ?"
         p query
         resp = @db.execute(query, [value]).flatten
-        resp.map! {|uuid| get(uuid)}
+        resp.map! {|id| get(id)}
         return resp
     end
    
@@ -81,16 +78,17 @@ end
 
 class DomainObject
 
-    def initialize(db, table, columns, uuid)
+    def initialize(db, table, columns, identifier_column, id)
         @db = db
         @table = table
         @columns = columns
-        
-        # veryify that the uuid is valid
-        # @get the first column, if it isnt an empty array the uuid is valid
-        @uuid = uuid
+        @id_column = identifier_column
+
+        # veryify that the id is valid
+        # @get the first column, if it isnt an empty array the id is valid
+        @id = id
         if get(@columns.first) == []
-            raise "Error: invalid uuid. no data at #{@columns.first}"
+            raise "Error: invalid id. no data at #{@columns.first}"
         end
     end
 
@@ -127,22 +125,22 @@ class DomainObject
     # get column
     def get(column)
         # get value from column
-        query = "SELECT #{column} FROM #{@table} WHERE uuid IS ?"
-        resp = @db.execute(query, @uuid).flatten[0]
+        query = "SELECT #{column} FROM #{@table} WHERE #{@id_column} IS ?"
+        resp = @db.execute(query, @id).flatten[0]
         return resp
     end
 
     def set(column, value)
         # set columns value
-        query = "UPDATE #{@table} SET #{column} = ? WHERE uuid IS ?"
-        @db.execute(query, [value, @uuid]).flatten
+        query = "UPDATE #{@table} SET #{column} = ? WHERE #{@id_column} IS ?"
+        @db.execute(query, [value, @id]).flatten
 
     end
     
     def delete()
         # delete column
         # only use for foreign key relationships
-        query = "DELETE FROM #{@table} where uuid IS ?"
-        @db.execute(query, [@uuid])
+        query = "DELETE FROM #{@table} WHERE #{@id_column} IS ?"
+        @db.execute(query, [@id])
     end
 end
