@@ -51,5 +51,8 @@ class Authentication
             return false
         end
     end
+    def verify_user_session(session_cookie)
+        return user_exists(sessin_cookie)
+    end
 end
 

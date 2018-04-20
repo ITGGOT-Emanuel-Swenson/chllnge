@@ -1,16 +1,17 @@
 class CHLLNGE < Sinatra::Base
     db_path = "database/chllnge.db"
-    database = DataBase.new(db_path)
-    db_handler = DBHandler.new(database.db)
-    def authorized(db)
+    db_handler = DBHandler.new(db_path)
+    def user_is_authorized(db)
         login_cookie = session[:login]
         username = session[:username]
         
         if login_cookie and username
             return Authentication.cookie_match(db, username, login_cookie)
         end
-  
     end
+
+    verif_user_session([:id])
+
 get '' do
     erb :index
 end
@@ -106,11 +107,15 @@ get '/login' do
     
 end
 post '/login' do
-
+    
+    # succesfull
+    session[:id] = username
 end
 
 
 get '/logout' do
+    
+    session.clear
     session[:username] = ''
     session[:login_cookie] = ''
     redirect to("/")
