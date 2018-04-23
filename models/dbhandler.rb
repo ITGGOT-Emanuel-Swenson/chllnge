@@ -15,14 +15,14 @@ class DBHandler
             db=@db,
             table="Comments",
             domain_object=CommentObject,
-            columns = ["user_id", "challenge_id", "uuid", "content", "img_url", "creation_date"],
+            columns=["user_id", "uuid", "content", "img_url", "creation_date"], 
             identifier_column = 'UUID'
             )
         @challenges_repo = ChallengeRepo.new(
             db=@db,
             table="Challenges",
             domain_object=ChallengeObject,
-            columns=["user_id", "uuid", "content", "img_url"],
+            columns=["user_id", "uuid", "title", "content", "creation_date"],
             identifier_column='UUID',
             foreign_domain_objects = {"comments_repo" => @comments_repo}
             )
@@ -31,7 +31,7 @@ class DBHandler
             db=@db, 
             table="Profiles", 
             domain_object=ProfileObject, 
-            columns=["user_id", "uuid", "content", "img_url", "creation_date"], 
+            columns = ["user_id", "challenge_id", "uuid", "content", "img_url", "creation_date"],
             identifier_column='UUID', 
             foreign_domain_objects = {"challenges_repo" => @challenges_repo}
             )

@@ -29,7 +29,7 @@ class Authentication
             }
             return @repo.create(val_hash)
         else
-            # user doesnt exist
+            # user already exist
             return false
         end
     end
@@ -51,7 +51,7 @@ class Authentication
             return false
         end
     end
-    def verify_user_session(session_cookie)
+    def user_authorized(session_cookie)
         return user_exists(sessin_cookie)
     end
 end
