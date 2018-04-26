@@ -31,7 +31,7 @@ class DBHandler
             db=@db, 
             table="Profiles", 
             domain_object=ProfileObject, 
-            columns = ["user_id", "challenge_id", "uuid", "content", "img_url", "creation_date"],
+            columns = ["user_id", "uuid", "content", "img_url" ],
             identifier_column='UUID', 
             foreign_domain_objects = {"challenges_repo" => @challenges_repo}
             )
