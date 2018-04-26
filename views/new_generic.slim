@@ -1,0 +1,17 @@
+- if not @user_is_authorized
+    #generic_new
+      form method="post" action="/object"
+        table#new-object-layout
+          tr
+            td
+              stuff1
+            td colspan="2"
+              input type="text" name="username" id="username" required="required" autofocus="autofocus" maxlength="25" placeholder="Username"
+          tr
+            td
+              stuff2
+            td colspan="2"
+             input type="password" name="password" id="password" required="required" maxlength="100" placeholder="Password"
+        input type="submit"  
+- else
+  #
