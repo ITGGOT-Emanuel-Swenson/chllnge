@@ -53,7 +53,8 @@ class Repo
   
     # get domain object
     def get(id)
-        return @domain_object.new(
+        begin
+            return @domain_object.new(
                                   @db, 
                                   @table, 
                                   @columns, 
@@ -61,6 +62,11 @@ class Repo
                                   id, 
                                   foreign_domain_objects=@foreign_domain_objects
                                  )
+        rescue Exception => e
+            puts e.message
+            puts e.backtrace.inspect
+            return nil
+        end
     end
     # get all domain objects
     def all()
@@ -78,7 +84,6 @@ class Repo
             raise "Error, invalid column. column: #{column}, value:#{value}\n valid columns:#{@columns}"
         end
         query = "SELECT #{@id_column} FROM #{@table} WHERE #{column} = ?"
-        p query
         resp = @db.execute(query, [value]).flatten
         resp.map! {|id| get(id)}
         return resp
@@ -101,18 +106,20 @@ class DomainObject
         # veryify that the id is valid
         # @get the first column, if it isnt an empty array the id is valid
         @id = id
-        if get(@columns.first) == []
+        p id
+        p get(@columns.first)
+        if get(@columns.first) == nil
             raise "Error: invalid id. no data at #{@columns.first}"
         end
     end
 
     def method_missing(method, *args)
         # conv symbol to string
-        method = method.to_s
+        method_string = method.to_s
         # split into parts to find out what it supposed to do
         # first part is function and the other is the column
         # ex: 'get_username' => ['get', 'username']
-        method_parts = method.split("_")
+        method_parts = method_string.split("_")
         
         # if the method is longer than 2 and the other part in method_parts is same as self.column
         # proceed
@@ -128,10 +135,10 @@ class DomainObject
                 return set(method_parts[1], args[0])
 
             else
-                super()
+                super(method, *args)
             end
         else
-            super()
+            super(method, *args)
         end
         
     end

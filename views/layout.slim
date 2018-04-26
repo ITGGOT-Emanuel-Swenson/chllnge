@@ -3,25 +3,29 @@ html
   head
     meta charset="UTF-8"
     meta name="viewport" content="width=device-width, initial-scale=1"
-    title UTMNGR
-    
-    link rel="stylesheet" href=base_css_path
-    - if @css_paths
-        - @css_paths.each do |path| %>
-            link rel="stylesheet" href=path
+    title CHLLNGE 
+    link rel="stylesheet" href='base_css_path'
   body
     header
       nav
         ul
           li
-            a href=url["home"] Home
-            a href=url["challenges"] Challenges
+            a Home
+            status == @user_is_authorized
+
+
+          
+          li
+            a Challenges
             
-            - if @authenticated
-              a href=url["profile"] Profile
-              a href=url["logout"] Logout
+            - if @user_is_authorized
+              li  
+                a == @user
+              li
+                a Logout
             - else
-              a href=url["login"] Login
+              li
+                a Login
     == yield
-    footer
+  footer
 

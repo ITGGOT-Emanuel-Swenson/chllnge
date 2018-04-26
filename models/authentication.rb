@@ -8,14 +8,7 @@ class Authentication
     end
 
     def user_exists(username)
-        begin
-            @repo.get(username)
-            return true
-        rescue Exception => e
-            puts e.message
-            puts e.backtrace.inspect
-            return false
-        end
+        return @repo.get(username)
     end
     
     def create_user(username, password)
@@ -52,7 +45,7 @@ class Authentication
         end
     end
     def user_authorized(session_cookie)
-        return user_exists(sessin_cookie)
+        return user_exists(session_cookie)
     end
 end
 

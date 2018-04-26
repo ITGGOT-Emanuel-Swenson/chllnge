@@ -7,12 +7,16 @@ class CHLLNGE < Sinatra::Base
     challenges = db_handler.challenges
     profiles = db_handler.profiles
 
+    enable :sessions
 before do
     # check if id is valid authorization
     @user_is_authorized = auth.user_authorized(session[:id])
+    if @user_is_authorized
+        @user = session[:id]
+    end
 end
 
-get '' do
+get '/' do
     slim :index
 end
 
@@ -164,7 +168,7 @@ post '/register' do
             'uuid' => SecureRandom.uuid,
             'content' => "",
             'img_url' => "",
-            'creation_date' => Time.now.to_s,
+            'date_joined' => Time.now.to_s,
             }
             profiles.create(dict)
 
@@ -178,6 +182,9 @@ end
 
 
 get '/login' do
+    puts 'session'
+    puts session[:id]
+    puts @user_is_authorized
     if not @user_is_authorized
         slim :login
     else
