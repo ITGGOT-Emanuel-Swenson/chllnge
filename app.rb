@@ -14,7 +14,10 @@ before do
     @user_is_authorized = auth.user_authorized(session[:id])
     if @user_is_authorized
         @user = session[:id]
-        @user_uuid = profiles.get(@user).get_uuid
+        
+        # only 1 profile will contain the username, therefore 'uuids' will contain only one element
+        uuids = profiles.search("user_id", @user)
+        @user_uuid = uuids[0] 
     end
     @urls = {
         "home" => "/",

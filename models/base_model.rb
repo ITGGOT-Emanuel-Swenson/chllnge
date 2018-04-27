@@ -78,12 +78,13 @@ class Repo
     end
 
     def search(column, value)
-        # performa SELECT WHERE query 
+        # perform a SELECT WHERE query 
+        
         # verify that the hash doesnt contain any columns not included in @columns
         if [column] - @columns != []
             raise "Error, invalid column. column: #{column}, value:#{value}\n valid columns:#{@columns}"
         end
-        query = "SELECT #{@id_column} FROM #{@table} WHERE #{column} = ?"
+        query = "SELECT #{@id_column} FROM #{@table} WHERE #{column} IS ?"
         resp = @db.execute(query, [value]).flatten
         resp.map! {|id| get(id)}
         return resp
@@ -106,6 +107,9 @@ class DomainObject
         # veryify that the id is valid
         # @get the first column, if it isnt an empty array the id is valid
         @id = id
+        p @id
+        p @columns.first
+
         if get(@columns.first) == nil
             raise "Error: invalid id. no data at #{@columns.first}"
         end
@@ -145,6 +149,7 @@ class DomainObject
     def get(column)
         # get value from column
         query = "SELECT #{column} FROM #{@table} WHERE #{@id_column} IS ?"
+        p query
         resp = @db.execute(query, @id).flatten[0]
         return resp
     end
