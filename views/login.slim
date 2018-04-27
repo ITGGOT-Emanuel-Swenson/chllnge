@@ -2,8 +2,7 @@ p ==@user_is_authorized
 - if not @user_is_authorized
     #login
       #title
-        p
-          Login
+        p Login
       form method="post" action="/login"
         table#login-layout
           tr
@@ -16,7 +15,7 @@ p ==@user_is_authorized
               Password
             td colspan="2"
              input type="password" name="password" id="password" required="required" maxlength="200" placeholder="Password"
-        input type="submit"  
+        input type="submit" value="submit" 
 - else
     #logout
       form method="get" action="/logout"
