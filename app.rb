@@ -8,12 +8,22 @@ class CHLLNGE < Sinatra::Base
     profiles = db_handler.profiles
 
     enable :sessions
+    
 before do
     # check if id is valid authorization
     @user_is_authorized = auth.user_authorized(session[:id])
     if @user_is_authorized
         @user = session[:id]
+        @user_uuid = profiles.get(@user).get_uuid
     end
+    @urls = {
+        "home" => "/",
+        "challenges" => "/challenges",
+        "profile" => "/profile",
+        "login" => "/login",
+        "logout" => "/logout",
+        "register" => "/register",
+    }
 end
 
 get '/' do
@@ -168,7 +178,7 @@ post '/register' do
             'uuid' => SecureRandom.uuid,
             'content' => "",
             'img_url' => "",
-            'date_joined' => Time.now.to_s,
+            'creation_date' => Time.now.to_s,
             }
             profiles.create(dict)
 

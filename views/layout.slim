@@ -4,27 +4,27 @@ html
     meta charset="UTF-8"
     meta name="viewport" content="width=device-width, initial-scale=1"
     title CHLLNGE 
-    link rel="stylesheet" href='base_css_path'
+    link rel="stylesheet"
   body
     header
       nav
         ul
           li
-            a Home
+            a href=@urls['home'] Home
           li
-            a Challenges
+            a href=@urls['challenges'] Challenges
             
             - if @user_is_authorized
               li  
                 a logged in as: 
-                a == @user
+                a  == @user
               li
-                a Logout
+                a href=@urls['logout'] Logout
             - else
               li
-                a Login
+                a href=@urls['login'] Login
               li
-                a Register
+                a href=@urls['register'] Register
     == yield
   footer
 

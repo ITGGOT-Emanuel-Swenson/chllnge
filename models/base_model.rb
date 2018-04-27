@@ -106,8 +106,6 @@ class DomainObject
         # veryify that the id is valid
         # @get the first column, if it isnt an empty array the id is valid
         @id = id
-        p id
-        p get(@columns.first)
         if get(@columns.first) == nil
             raise "Error: invalid id. no data at #{@columns.first}"
         end
