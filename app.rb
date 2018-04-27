@@ -17,7 +17,7 @@ before do
         
         # only 1 profile will contain the username, therefore 'uuids' will contain only one element
         uuids = profiles.search("user_id", @user)
-        @user_uuid = uuids[0] 
+        @user_uuid = uuids[0].get_uuid 
     end
     @urls = {
         "home" => "/",

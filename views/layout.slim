@@ -17,7 +17,7 @@ html
             - if @user_is_authorized
               li  
                 a logged in as: 
-                a  == @user
+                a href=@urls['profile']+"/"+@user_uuid profile
               li
                 a href=@urls['logout'] Logout
             - else
