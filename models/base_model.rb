@@ -121,20 +121,27 @@ class DomainObject
         # split into parts to find out what it supposed to do
         # first part is function and the other is the column
         # ex: 'get_username' => ['get', 'username']
+        puts method_string
         method_parts = method_string.split("_")
-        
-        # if the method is longer than 2 and the other part in method_parts is same as self.column
+        puts method_parts
+        column = method_parts.slice(1, method_parts.length)
+        puts column
+        column = column.join('_')
+        puts column
+        # if the method is longer or equal to 2 and the column in the method name is in the DataObject columns       
         # proceed
         # if not, call the original method_missing
-        if method_parts.length == 2 and @columns.include?(method_parts[1]) 
+        if method_parts.length >= 2 and @columns.include?(column) 
 
             # find the operation and pass the column as argument 
             if method_parts[0] == "get"
-                return get(method_parts[1])
+                # return get(method_parts[1])
+                # depreceated, doesnt work if method parts contain additional _
+                return get(column)
 
             elsif method_parts[0] == "set"
                 # self.set() requires one more argument, the first value in args 
-                return set(method_parts[1], args[0])
+                return set(column, args[0])
 
             else
                 super(method, *args)
