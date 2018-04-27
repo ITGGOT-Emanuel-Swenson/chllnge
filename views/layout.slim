@@ -11,21 +11,20 @@ html
         ul
           li
             a Home
-            status == @user_is_authorized
-
-
-          
           li
             a Challenges
             
             - if @user_is_authorized
               li  
+                a logged in as: 
                 a == @user
               li
                 a Logout
             - else
               li
                 a Login
+              li
+                a Register
     == yield
   footer
 
