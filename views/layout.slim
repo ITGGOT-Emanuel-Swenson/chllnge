@@ -13,11 +13,12 @@ html
             a href=@urls['home'] Home
           li
             a href=@urls['challenges'] Challenges
+          li
+            a href=@urls['profiles'] Profiles 
             
             - if @user_is_authorized
               li  
-                a logged in as: 
-                a href=@urls['profile']+"/"+@user_uuid profile
+                a href=@urls['profile']+"/"+@user_uuid Your Profile
               li
                 a href=@urls['logout'] Logout
             - else

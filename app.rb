@@ -22,7 +22,7 @@ before do
     @urls = {
         "home" => "/",
         "challenges" => "/challenges",
-        "profile" => "/profile",
+        "profiles" => "/profiles",
         "login" => "/login",
         "logout" => "/logout",
         "register" => "/register",
