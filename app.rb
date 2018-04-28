@@ -3,22 +3,22 @@ class CHLLNGE < Sinatra::Base
     db_handler = DBHandler.new(db_path)
     auth = db_handler.auth
    
-    comments = db_handler.comments
-    challenges = db_handler.challenges
-    profiles = db_handler.profiles
-
     enable :sessions
     
 before do
+    @comments = db_handler.comments
+    @challenges = db_handler.challenges
+    @profiles = db_handler.profiles
     # check if id is valid authorization
     @user_is_authorized = auth.user_authorized(session[:id])
     if @user_is_authorized
         @user = session[:id]
         
         # only 1 profile will contain the username, therefore 'uuids' will contain only one element
-        uuids = profiles.search("user_id", @user)
+        uuids = @profiles.search("user_id", @user)
         @user_uuid = uuids[0].get_uuid 
     end
+    
     @urls = {
         "home" => "/",
         "challenges" => "/challenges",
@@ -51,7 +51,7 @@ end
 
 get '/challenges/:uuid' do
     # get a specific challenge
-    @challenge = challenges.get(params['uuid'])
+    @challenge = @challenges.get(params['uuid'])
     slim :challenge
 end
 
@@ -66,7 +66,7 @@ post '/challenges' do
         'content' => params['content'],
         'creation_date' => Time.now.to_s,
         }
-        challenges.create(dict)
+        @challenges.create(dict)
         redirect to("/challenges/#{uuid}")
     else
     end
@@ -104,7 +104,7 @@ post '/profiles/' do
         'content' => params['content'],
         'creation_date' => Time.now.to_s,
         }
-        profiles.create(dict)
+        @profiles.create(dict)
         redirect to("/profiles/#{uuid}")
     else
         slim :no_permission
@@ -112,7 +112,7 @@ post '/profiles/' do
 end
 
 get '/profiles/:uuid/edit' do
-    @profile = profiles.get(params['uuid'])
+    @profile = @profiles.get(params['uuid'])
     if session[:id] == @profile.get_user_id
         slim :edit_profile
     else
@@ -120,7 +120,7 @@ get '/profiles/:uuid/edit' do
     end
 end
 patch '/profiles/:uuid/edit' do
-    @profile = profiles.get(params['uuid'])
+    @profile = @profiles.get(params['uuid'])
     # edit
     if session[:id] == @profile.get_user_id
         slim :edit_profile
@@ -150,7 +150,7 @@ post '/comments/' do
         'content' => params['content'],
         'creation_date' => Time.now.to_s,
         }
-        comments.create(dict)
+        @comments.create(dict)
         redirect to("/comments/#{uuid}")
     else
         redirect to("/login")
@@ -183,7 +183,7 @@ post '/register' do
             'img_url' => "",
             'creation_date' => Time.now.to_s,
             }
-            profiles.create(dict)
+            @profiles.create(dict)
 
             session[:id] = username
             redirect to("/")

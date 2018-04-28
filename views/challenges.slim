@@ -1,0 +1,13 @@
+#content-window
+  #challenges
+    - @challenges.all().each do |chall|
+      #challenge-card
+        #title
+          p =chall.get_title
+        #content
+          p =chall.get_content
+        #creator
+          p =chall.get_user_id
+  #new-challenge
+    p
+      a href=@urls["challenges"]+"/new" Create a new challenge! 
