@@ -1,9 +1,12 @@
-- if @user_is_authorized
-    #generic-new
-      form method="post" action="/challenges"
-        input type="text" name="title" id="title" required="required" autofocus="autofocus" maxlength="25" placeholder="Title"
-        input type="text" name="description" id="description" required="required" autofocus="autofocus" maxlength="700" placeholder="Description"
-        input type="submit"  
-- else
-  #not-logged-in
-    You need to be logged in to create a new Challenge
+#content-window
+  #base-window
+    #title Create a challenge
+  - if @user_is_authorized
+      #generic-new
+        form method="post" action="/challenges"
+          input type="text" name="title" id="title" required="required" autofocus="autofocus" maxlength="25" placeholder="Title"
+          input type="text" name="content" id="content" required="required" autofocus="autofocus" maxlength="700" placeholder="Description"
+          input type="submit" value="submit" 
+  - else
+    #not-logged-in
+      You need to be logged in to create a new Challenge

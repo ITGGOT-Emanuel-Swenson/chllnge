@@ -42,7 +42,7 @@ get '/challenges' do
 end
 get '/challenges/new' do
     # get input template
-    if not @user_is_authorized
+    if @user_is_authorized
         slim :new_challenge
     else
         redirect to("/login")

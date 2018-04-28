@@ -1,0 +1,20 @@
+#content
+  #challenge
+    #title
+      p =@challenge.get_title
+    #content
+      p =@challenge.get_content
+      p =@challenge.get_uuid
+  #comments-field 
+    p comments
+    #comment-form
+      - if @user_is_authorized
+        #comment-form
+          form method="post" action="/comments"
+          input type="text" name="content" id="content" required="required" autofocus="autofocus" maxlength="700" placeholder="content"
+          input type="submit" value="submit"  
+      - else
+        #not-logged-in
+          You need to be logged in to create a comment
+    #comments
+      p wow, detta var svårt
