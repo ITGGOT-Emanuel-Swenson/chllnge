@@ -3,9 +3,23 @@
     #image-container
       img src=@profile.get_img_url
     #profile-content
-      p = @profile.get_content
-      p = @profile.get_uuid
+      #username
+        p =@profile.get_user_id
+      #profile-content
+        p =@profile.get_content
+    - if @user_is_authorized and @user == @profile.get_user_id
+      #edit_button
+        p 
+          a href="#{@urls['profiles']}/#{@profile.get_uuid}/edit" edit
   #created-challenges 
     p created challenges
-  #taken-challenges
-    p taken challenges
+    - @challenges.search("user_id", @profile.get_user_id).each do |chall|
+      #challenge-card-small
+        #title
+          p 
+            a href="#{@urls['challenges']}/#{chall.get_uuid}" =chall.get_title
+        #content
+          p =chall.get_content
+
+  #completed-challenges
+    p completed challenges

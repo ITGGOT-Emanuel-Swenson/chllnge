@@ -15,7 +15,7 @@ class DBHandler
             db=@db,
             table="Comments",
             domain_object=CommentObject,
-            columns=["user_id", "uuid", "content", "img_url", "creation_date"], 
+            columns=["user_id", "uuid", "challenge_id", "content", "creation_date"], 
             identifier_column = 'UUID'
             )
         @challenges_repo = ChallengeRepo.new(

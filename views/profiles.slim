@@ -1,0 +1,11 @@
+#content-window
+  #profiles
+    - @profiles.all().each do |profile|
+      #profile-card
+        #username
+          p 
+            a href='#{@urls['profiles']}//#{profile.get_uuid}' =profile.get_user_id
+        #profile-pic
+          img src=profile.get_img_url
+        #content
+          p =profile.get_content

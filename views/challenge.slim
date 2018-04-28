@@ -1,5 +1,9 @@
 #content
   #challenge
+    #creator
+      p
+        a href="#{@urls['profiles']}/#{@profiles.search("user_id", @challenge.get_user_id)[0].get_uuid}" =@challenge.get_user_id
+
     #title
       p =@challenge.get_title
     #content
@@ -11,10 +15,19 @@
       - if @user_is_authorized
         #comment-form
           form method="post" action="/comments"
-          input type="text" name="content" id="content" required="required" autofocus="autofocus" maxlength="700" placeholder="content"
-          input type="submit" value="submit"  
+            input type="hidden" name="challenge_uuid" id="challenge_uuid" value=@challenge.get_uuid
+            input type="text" name="content" id="content" required="required" autofocus="autofocus" maxlength="700" placeholder="content"
+            input type="submit" value="submit"  
       - else
         #not-logged-in
-          You need to be logged in to create a comment
+          |You need to be logged in to create a comment
     #comments
-      p wow, detta var svårt
+      - @challenge.get_comments.each do |comment|
+        #comment
+          #username
+            p 
+              a href="#{@urls['profiles']}/#{@profiles.search("user_id", comment.get_user_id)[0].get_uuid}" =comment.get_user_id
+          #creation-date
+            p =comment.get_creation_date
+          #comment-content
+            p =comment.get_content

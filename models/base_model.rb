@@ -116,18 +116,15 @@ class DomainObject
     end
 
     def method_missing(method, *args)
+        puts args
         # conv symbol to string
         method_string = method.to_s
         # split into parts to find out what it supposed to do
         # first part is function and the other is the column
         # ex: 'get_username' => ['get', 'username']
-        puts method_string
         method_parts = method_string.split("_")
-        puts method_parts
         column = method_parts.slice(1, method_parts.length)
-        puts column
         column = column.join('_')
-        puts column
         # if the method is longer or equal to 2 and the column in the method name is in the DataObject columns       
         # proceed
         # if not, call the original method_missing

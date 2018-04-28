@@ -1,8 +1,10 @@
 - if @user_is_authorized
     #generic-new
-      form method="post" action="/object"
-        input type="text" name="content" id="content" required="required"  maxlength="700" placeholder="Describe Yourself" value="#{@content}"
-        input type="text" name="img_url" id="img_url" required="required" maxlength="100" placeholder="URL to your profile pic" value="#{@img_url}"
+      form method="post" action="/profiles/#{@profile.get_uuid}"
+        p profile description
+        input type="text" name="content" id="content" required="required"  maxlength="700" placeholder="Describe Yourself" value="#{@profile.get_content}"
+        p url to your profile pic
+        input type="text" name="img_url" id="img_url" required="required" maxlength="100" placeholder="URL to your profile pic" value="#{@profile.get_img_url}"
         input type="submit"  
 - else
   #not-logged-in

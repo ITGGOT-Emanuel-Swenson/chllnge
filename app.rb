@@ -89,7 +89,7 @@ end
 
 get '/profiles/:uuid' do
     # get a specific profile
-    @profile = profiles.get(params['uuid'])
+    @profile = @profiles.get(params['uuid'])
     slim :profile
 end
 
@@ -119,11 +119,13 @@ get '/profiles/:uuid/edit' do
         slim :no_permission
     end
 end
-patch '/profiles/:uuid/edit' do
+post '/profiles/:uuid' do
     @profile = @profiles.get(params['uuid'])
     # edit
     if session[:id] == @profile.get_user_id
-        slim :edit_profile
+        @profile.set_content(params['content'])
+        @profile.set_img_url(params['img_url'])
+        redirect to("/profiles/#{params['uuid']}")
     else
         slim :no_permission
     end
@@ -139,25 +141,28 @@ end
 get '/comments/:uuid' do
 end
 
-post '/comments/' do
+post '/comments' do
     # create
-    if @user_is_authorized
+    puts @challenges.search("uuid", params['challenge_uuid'])
+    challenge = @challenges.search("uuid", params['challenge_uuid'])
+    if @user_is_authorized and challenge != []
+        challenge = challenge[0]
         uuid = SecureRandom.uuid
         dict = {
         'user_id' => session[:id],
         'uuid' => uuid,
-        'challenge_id' => params['challenge_id'],
+        'challenge_id' => params['challenge_uuid'],
         'content' => params['content'],
         'creation_date' => Time.now.to_s,
         }
         @comments.create(dict)
-        redirect to("/comments/#{uuid}")
+        redirect to("#{@urls['challenges']}/#{challenge.get_uuid}")
     else
-        redirect to("/login")
+        redirect to(@urls['login'])
     end
 end
 
-patch '/comments/:uuid/edit' do
+patch '/comments/:uuid/' do
 end
 
 delete '/comments/:uuid' do

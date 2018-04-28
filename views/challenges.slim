@@ -3,11 +3,13 @@
     - @challenges.all().each do |chall|
       #challenge-card
         #title
-          p =chall.get_title
+          p 
+            a href="#{@urls['challenges']}/#{chall.get_uuid}" =chall.get_title
         #content
           p =chall.get_content
         #creator
-          p =chall.get_user_id
+          p
+            a href="#{@urls['profiles']}/#{@profiles.search("user_id", chall.get_user_id)[0].get_uuid}" =chall.get_user_id
   #new-challenge
     p
       a href=@urls["challenges"]+"/new" Create a new challenge! 
