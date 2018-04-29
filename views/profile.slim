@@ -22,4 +22,11 @@
           p =chall.get_content
 
   #completed-challenges
-    p completed challenges
+    p completed challenges:
+    - @completed_challenges.get_challenges_by_user_id(@profile.get_user_id).each do |compchall|
+      #challenge-card-small
+        #title
+          p 
+            a href="#{@urls['challenges']}/#{compchall.get_uuid}" =compchall.get_title
+        #content
+          p =compchall.get_content

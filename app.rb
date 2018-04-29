@@ -9,6 +9,7 @@ before do
     @comments = db_handler.comments
     @challenges = db_handler.challenges
     @profiles = db_handler.profiles
+    @completed_challenges = db_handler.completed_challenges
     # check if id is valid authorization
     @user_is_authorized = auth.user_authorized(session[:id])
     if @user_is_authorized
@@ -52,6 +53,20 @@ end
 get '/challenges/:uuid' do
     # get a specific challenge
     @challenge = @challenges.get(params['uuid'])
+    p @challenge
+    p @challenge.get_user_id
+    if @user_is_authorized
+        @challenge_completed = false
+        # check if user has completed challenge
+        completed_challs = @completed_challenges.get_challenges_by_user_id(@user)
+        completed_challs.each do |chall|
+            if chall != nil and chall.get_uuid == @challenge.get_uuid
+                @challenge_completed = true
+            end
+        end
+    end
+
+
     slim :challenge
 end
 
@@ -76,6 +91,24 @@ patch '/challenges/:uuid/edit' do
 end
 
 delete '/challenges/:uuid' do
+end
+
+post '/completechallenge/' do 
+    if @user_is_authorized
+        @challenge = @challenges.get(params['challenge_uuid'])
+        uuid = SecureRandom.uuid
+        dict = {
+            'uuid' => uuid,
+            'challenge_id' => @challenge.get_uuid,
+            'user_id' => @user,
+            'creation_date' => Time.now.to_s,
+        }
+       
+        @completed_challenges.create(dict)
+        redirect to(@urls['challenges']+"/"+@challenge.get_uuid)
+    else
+        slim :no_permission
+    end
 end
 
 
@@ -192,6 +225,9 @@ post '/register' do
 
             session[:id] = username
             redirect to("/")
+            
+        else
+            slim :user_exists
         end
     else
         slim :logged_in

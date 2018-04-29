@@ -1,6 +1,7 @@
 require_relative 'comments.rb'
 require_relative 'challenges.rb'
 require_relative 'profiles.rb'
+require_relative 'completed_challenges.rb'
 require_relative 'accounts.rb'
 require_relative 'database.rb'
 require_relative 'authentication.rb'
@@ -35,6 +36,14 @@ class DBHandler
             identifier_column='UUID', 
             foreign_domain_objects = {"challenges_repo" => @challenges_repo}
             )
+        @completed_challenges_repo = CompletedChallengesRepo.new(
+            db=@db,
+            table="CompletedChallenges",
+            domain_object=CompletedChallengesObject,
+            columns = ["uuid", "challenge_id", "user_id", "creation_date"],
+            identifier_column = 'UUID',
+            foreign_domain_objects = {"challenges_repo" => @challenges_repo,}
+            ) 
         
         acc_repo = AccountRepo.new(
             db=@db, 
@@ -55,7 +64,9 @@ class DBHandler
     def challenges
         return @challenges_repo
     end
-
+    def completed_challenges
+        return @completed_challenges_repo
+    end
     def auth
         return @auth
     end

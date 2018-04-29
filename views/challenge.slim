@@ -8,7 +8,16 @@
       p =@challenge.get_title
     #content
       p =@challenge.get_content
-      p =@challenge.get_uuid
+
+    - if @user_is_authorized
+      #completed-buton
+        - if not @challenge_completed
+          form method="post" action="/completechallenge/"
+            input type="hidden" name="challenge_uuid" id="challenge_uuid" value=@challenge.get_uuid
+            input type="submit" value="challenge completed"  
+        - else
+          #challenge-completed
+            p Challenge Completed!
   #comments-field 
     p comments
     #comment-form

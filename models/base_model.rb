@@ -84,8 +84,13 @@ class Repo
         if [column] - @columns != []
             raise "Error, invalid column. column: #{column}, value:#{value}\n valid columns:#{@columns}"
         end
+        puts "SEARCH #{@table}" 
         query = "SELECT #{@id_column} FROM #{@table} WHERE #{column} IS ?"
+        p query
+        p column
+        p value
         resp = @db.execute(query, [value]).flatten
+        p resp
         resp.map! {|id| get(id)}
         return resp
     end
@@ -107,8 +112,8 @@ class DomainObject
         # veryify that the id is valid
         # @get the first column, if it isnt an empty array the id is valid
         @id = id
-        p @id
-        p @columns.first
+        p "id: "+@id
+        p "first col: "+@columns.first
 
         if get(@columns.first) == nil
             raise "Error: invalid id. no data at #{@columns.first}"
@@ -154,6 +159,7 @@ class DomainObject
         # get value from column
         query = "SELECT #{column} FROM #{@table} WHERE #{@id_column} IS ?"
         p query
+        p "? = #{@id}"
         resp = @db.execute(query, @id).flatten[0]
         return resp
     end
